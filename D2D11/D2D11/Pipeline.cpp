@@ -148,9 +148,16 @@ namespace Pipeline
                 {
                     FreeImage_Initialise();
                     {
-                        FIBITMAP* bitmap = FreeImage_Load(FREE_IMAGE_FORMAT::FIF_PNG, "Player.png");
+                        FIBITMAP* bitmap = FreeImage_Load(FREE_IMAGE_FORMAT::FIF_PNG, "penitent_idle.png");
                         {
                             FreeImage_FlipVertical(bitmap);
+
+                            if (FreeImage_GetBPP(bitmap) != 32)
+                            {
+                                FIBITMAP* const previous = bitmap;
+                                bitmap = FreeImage_ConvertTo32Bits(bitmap);
+                                FreeImage_Unload(previous);
+                            }
 
                             D3D11_TEXTURE2D_DESC descriptor = D3D11_TEXTURE2D_DESC();
                             descriptor.Width            = FreeImage_GetWidth(bitmap);
@@ -220,12 +227,12 @@ namespace Pipeline
                 {
                     static struct 
                     {
-                        float const Width  = 84;
-                        float const Height = 120;
+                        float const Width  = 71;
+                        float const Height = 76;
                     }frame;
                     
                     static unsigned       count  =   0;
-                    static const unsigned motion =  12;
+                    static const unsigned motion =  13;
                     static const unsigned fpm    = 700;
 
                     float const Coordinates[4][2]
@@ -235,6 +242,13 @@ namespace Pipeline
                         { frame.Width * (count / fpm + 0), frame.Height * 1 }, // 좌하단
                         { frame.Width * (count / fpm + 1), frame.Height * 1 }, // 우하단
                     };
+
+                    {
+                        D3D11_MAPPED_SUBRESOURCE subResource = D3D11_MAPPED_SUBRESOURCE();
+                        MUST(DeviceContext->Map(Buffer::Vertex, 0, D3D11_MAP_WRITE_DISCARD , 0, &subResource));
+                        memcpy_s(subResource.pData, subResource.RowPitch, Coordinates, sizeof(Coordinates)); // 배열 전체만큼 초기화
+                        DeviceContext->Unmap(Buffer::Vertex , 0);
+                    }
 
                     count += 1;
 
