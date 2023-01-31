@@ -1,7 +1,4 @@
-﻿  compilation header save succeeded; see D:\D2D11_SGA\D2D11_SGA\D2D11\D2D11\Shader\Bytecode\Pixel.h
-  compilation object save succeeded; see D:\D2D11_SGA\D2D11_SGA\D2D11\.out\Pixel.cso
-  compilation header save succeeded; see D:\D2D11_SGA\D2D11_SGA\D2D11\D2D11\Shader\Bytecode\Vertex.h
-  compilation object save succeeded; see D:\D2D11_SGA\D2D11_SGA\D2D11\.out\Vertex.cso
-  Entry.cpp
+﻿  compilation header save succeeded; see D:\6D\D2D11_SGA\D2D11\D2D11\Shader\Bytecode\Vertex.h
+  compilation object save succeeded; see D:\6D\D2D11_SGA\D2D11\.out\Vertex.cso
   Pipeline.cpp
-  D2D11.vcxproj -> D:\D2D11_SGA\D2D11_SGA\D2D11\.out\D2D11.exe
+  D2D11.vcxproj -> D:\6D\D2D11_SGA\D2D11\.out\D2D11.exe
