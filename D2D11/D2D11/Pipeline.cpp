@@ -256,7 +256,7 @@ namespace Pipeline
             {
                 static struct
                 {
-                    float const Width = 71;
+                    float const Width  = 71;
                     float const Height = 76;
                 }frame;
 
@@ -264,7 +264,7 @@ namespace Pipeline
                 static const unsigned motion = 13;
                 static const unsigned fpm = 700;
 
-                float const Coordinates[4][2]
+                float const Coordinates[4][2] 
                 {
                     { frame.Width * (count / fpm + 0), frame.Height * 0 }, // 좌상단
                     { frame.Width * (count / fpm + 1), frame.Height * 0 }, // 우상단
@@ -288,26 +288,34 @@ namespace Pipeline
                 // 0 0 1 0 
                 // 0 0 0 1 -> 단위행렬
 
+                static float W = 71;
+                static float H = 76;
+                static float X = 0;
+                static float Y = 0;
+
+
                 float World[4][4] // 월드좌표
                 {
-                   1, 0, 0, 0,
-                   0, 1, 0, 0,
+                   W, 0, 0, X,
+                   0, H, 0, Y,
+                   0, 0, 1, 0,
+                   0, 0, 0, 1 // 전치행렬? -> 컴퓨터는 열기준으로 읽어서 행기준으로 보내줘야됌
+                };
+
+                float View[4][4] // 카메라
+                {
+                   1, 0, 0, X * -1.0f,
+                   0, 1, 0, Y * -1.0f,
                    0, 0, 1, 0,
                    0, 0, 0, 1
                 };
 
-                float View[4][4]
-                {
-                   1, 0, 0, 0,
-                   0, 1, 0, 0,
-                   0, 0, 1, 0,
-                   0, 0, 0, 1
-                };
+                X += 0.005f;
 
                 static float const x = 2.0f / 500.0f;
                 static float const y = 2.0f / 500.0f;
 
-                float Projection[4][4]
+                float Projection[4][4] // orthographic -> 2d , perspective ->원근법(아마 xcom같은게임)
                 {
                    x, 0, 0, 0,
                    0, y, 0, 0,
@@ -316,10 +324,26 @@ namespace Pipeline
                 };
 
                 Buffer::Update(Buffer::Constant[0], World);
-                Buffer::Update(Buffer::Constant[0], View);
-                Buffer::Update(Buffer::Constant[0], Projection);
+                Buffer::Update(Buffer::Constant[1], View);
+                Buffer::Update(Buffer::Constant[2], Projection);
 
+                DeviceContext->Draw(4, 0);
+            }
 
+            {
+                static float W = 71 / 3;
+                static float H = 76 / 3;
+                static float X = 100;
+                static float Y = 100;
+
+                float World[4][4] // 월드좌표
+                {
+                   W, 0, 0, X,
+                   0, H, 0, Y,
+                   0, 0, 1, 0,
+                   0, 0, 0, 1 // 전치행렬? -> 컴퓨터는 열기준으로 읽어서 행기준으로 보내줘야됌
+                };
+                Buffer::Update(Buffer::Constant[0], World);
                 DeviceContext->Draw(4, 0);
             }
             return 0;
